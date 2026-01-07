@@ -1,0 +1,311 @@
+{
+  "info": {
+    "name": "Resource Sharing System",
+    "description": "Access control system for sharing resources with users, groups, or everyone",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "groupId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "resourceId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List all users",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users"
+          }
+        },
+        {
+          "name": "Get user by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users/{{userId}}"
+          }
+        },
+        {
+          "name": "Create user",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get user's groups",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users/{{userId}}/groups"
+          }
+        },
+        {
+          "name": "Add user to group",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users/{{userId}}/groups/{{groupId}}"
+          }
+        },
+        {
+          "name": "Remove user from group",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/users/{{userId}}/groups/{{groupId}}"
+          }
+        },
+        {
+          "name": "Get user's accessible resources",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users/{{userId}}/resources",
+            "description": "Returns all resources the user has access to (direct, group-based, or global)"
+          }
+        },
+        {
+          "name": "Users with resource count (aggregation)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users/with-resource-count",
+            "description": "Returns all users with count of accessible resources"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Groups",
+      "item": [
+        {
+          "name": "List all groups",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups"
+          }
+        },
+        {
+          "name": "Get group by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/{{groupId}}"
+          }
+        },
+        {
+          "name": "Create group",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/groups",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Engineering\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get group members",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/groups/{{groupId}}/members"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Resources",
+      "item": [
+        {
+          "name": "List all resources (public)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/resources"
+          }
+        },
+        {
+          "name": "Get resource by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/resources/{{resourceId}}",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}",
+                "description": "Required - User must have access to this resource"
+              }
+            ]
+          }
+        },
+        {
+          "name": "Create resource",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/resources",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}",
+                "description": "Required - Creator is automatically granted access"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Project Alpha\",\n  \"description\": \"Top secret project files\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get resource access list",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/resources/{{resourceId}}/access-list",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}",
+                "description": "Required - User must have access to this resource"
+              }
+            ],
+            "description": "Returns all users who have access to this resource (direct, group-based, or global)"
+          }
+        },
+        {
+          "name": "Get resource shares",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/resources/{{resourceId}}/shares",
+            "header": [
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}",
+                "description": "Required - User must have access to this resource"
+              }
+            ],
+            "description": "Returns the sharing rules for this resource"
+          }
+        },
+        {
+          "name": "Share with user",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/resources/{{resourceId}}/shares",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}",
+                "description": "Required - User must have access to this resource"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"share_type\": \"user\",\n  \"target_id\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "Share with group",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/resources/{{resourceId}}/shares",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}",
+                "description": "Required - User must have access to this resource"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"share_type\": \"group\",\n  \"target_id\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Share with everyone",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/resources/{{resourceId}}/shares",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-Id",
+                "value": "{{userId}}",
+                "description": "Required - User must have access to this resource"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"share_type\": \"everyone\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Resources with user count (aggregation)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/resources/with-user-count",
+            "description": "Returns all resources with count of users who have access"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    }
+  ]
+}
