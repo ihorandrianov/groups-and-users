@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "bun --watch src/index.ts",
     "start": "bun src/index.ts",
-    "migrate": "knex migrate:latest",
-    "migrate:make": "knex migrate:make",
-    "migrate:rollback": "knex migrate:rollback",
+    "migrate": "bunx knex migrate:latest",
+    "migrate:make": "bunx knex migrate:make",
+    "migrate:rollback": "bunx knex migrate:rollback",
     "seed": "bun src/seed.ts",
     "bench": "bun src/bench.ts"
   },

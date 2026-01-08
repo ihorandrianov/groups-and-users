@@ -2,6 +2,8 @@
 
 Access control system that allows resources to be shared with individual users, groups, or everyone.
 
+Projects includes seed script, run it coutiously, with a lot of users some queries takes ages, since i did not implemented pagination and other important things
+
 ## Run with Docker
 
 ```bash
