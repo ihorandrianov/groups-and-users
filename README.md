@@ -85,6 +85,7 @@ SELECT EXISTS (
     JOIN user_groups ug ON ug.group_id = rs.group_id
     WHERE rs.resource_id = ? AND ug.user_id = ?                     -- group
 ) as has_access
+```
 
 - `EXISTS` stops at first match (fast for positive cases)
 - `UNION ALL` preserves short-circuit (vs `UNION` which must dedupe)
