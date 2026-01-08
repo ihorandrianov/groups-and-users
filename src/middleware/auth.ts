@@ -1,6 +1,6 @@
 import type { preHandlerHookHandler } from "fastify";
 import { unauthorized } from "../errors";
-import { parseUserId, type UserId } from "../schemas";
+import { stringToUserId, type UserId } from "../schemas";
 
 declare module "fastify" {
   interface FastifyRequest {
@@ -11,5 +11,5 @@ declare module "fastify" {
 export const authMiddleware: preHandlerHookHandler = async (req) => {
   const header = req.headers["x-user-id"];
   if (!header || Array.isArray(header)) throw unauthorized();
-  req.userId = parseUserId(header);
+  req.userId = stringToUserId.parse(header);
 };
