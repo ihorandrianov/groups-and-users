@@ -11,7 +11,7 @@ export type ResourceId = z.infer<typeof ResourceId>;
 export const stringToUserId = z.string().min(1).transform((val, ctx) => {
   const parsed = UserId.safeParse(parseInt(val, 10));
   if (!parsed.success) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Invalid user ID" });
+    ctx.addIssue({ code: "custom", message: "Invalid user ID" });
     return z.NEVER;
   }
   return parsed.data;
@@ -20,7 +20,7 @@ export const stringToUserId = z.string().min(1).transform((val, ctx) => {
 export const stringToGroupId = z.string().min(1).transform((val, ctx) => {
   const parsed = GroupId.safeParse(parseInt(val, 10));
   if (!parsed.success) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Invalid group ID" });
+    ctx.addIssue({ code: "custom", message: "Invalid group ID" });
     return z.NEVER;
   }
   return parsed.data;
@@ -29,7 +29,7 @@ export const stringToGroupId = z.string().min(1).transform((val, ctx) => {
 export const stringToResourceId = z.string().min(1).transform((val, ctx) => {
   const parsed = ResourceId.safeParse(parseInt(val, 10));
   if (!parsed.success) {
-    ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Invalid resource ID" });
+    ctx.addIssue({ code: "custom", message: "Invalid resource ID" });
     return z.NEVER;
   }
   return parsed.data;
@@ -37,7 +37,7 @@ export const stringToResourceId = z.string().min(1).transform((val, ctx) => {
 
 export const CreateUserSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email format"),
+  email: z.email(),
 });
 
 export const CreateGroupSchema = z.object({
@@ -67,26 +67,4 @@ export type CreateGroup = z.infer<typeof CreateGroupSchema>;
 export type CreateResource = z.infer<typeof CreateResourceSchema>;
 export type CreateShare = z.infer<typeof CreateShareSchema>;
 
-export function parseUserId(val: string): UserId {
-  const num = parseInt(val, 10);
-  if (isNaN(num) || num <= 0) {
-    throw new Error("Invalid user ID");
-  }
-  return num as UserId;
-}
 
-export function parseGroupId(val: string): GroupId {
-  const num = parseInt(val, 10);
-  if (isNaN(num) || num <= 0) {
-    throw new Error("Invalid group ID");
-  }
-  return num as GroupId;
-}
-
-export function parseResourceId(val: string): ResourceId {
-  const num = parseInt(val, 10);
-  if (isNaN(num) || num <= 0) {
-    throw new Error("Invalid resource ID");
-  }
-  return num as ResourceId;
-}
