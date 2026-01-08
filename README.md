@@ -54,7 +54,11 @@ I like having all sharing logic in one place
 
 ### CTE + UNION for Correctness vs Simple COUNT for Performance
 
-UNION is super slow but correct. If we dont care about duplication i have approach with just counting all accesses in CTEs and then just summing up
+
+
+UNION is super slow but correct. If we dont care about duplication i have approach with just counting all accesses in CTEs and then just summing up.
+
+There is bench for this query cross join surprisingly faster then correlated query.
 
 **What can be done better:
 - Materialized views? (personaly i hate them)
